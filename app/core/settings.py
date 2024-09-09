@@ -95,3 +95,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery Configurations
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_ACCEPT_CONTENT = list(map(str.strip, os.getenv("CELERY_ACCEPT_CONTENT", "").split(",")))
+CELERY_IMPORTS = []
