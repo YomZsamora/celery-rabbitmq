@@ -12,6 +12,7 @@ services:
       - ./app/.env
     depends_on:
       - celery-app-db
+      - rabbitmq
 
   celery-app-db:
     image: mysql:8.0.31
@@ -22,6 +23,25 @@ services:
       - 3312:3306
     volumes:
       - celery-app-db:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    hostname: my-rabbit-mq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  celery-worker:
+    build: ./app
+    command: celery -A core worker --loglevel=INFO
+    volumes:
+      - ./app:/code
+    depends_on:
+      - celery-app
+      - rabbitmq
+    env_file:
+      - ./app/.env
 
 volumes:
   celery-app-db:
