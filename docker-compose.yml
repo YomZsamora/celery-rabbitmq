@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  celery-app:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app:/code
+    ports:
+      - 8023:8000
+    env_file:
+      - ./app/.env
+    depends_on:
+      - celery-app-db
+
+  celery-app-db:
+    image: mysql:8.0.31
+    restart: always
+    env_file:
+      - ./app/.env
+    ports:
+      - 3312:3306
+    volumes:
+      - celery-app-db:/var/lib/mysql
+
+volumes:
+  celery-app-db:
