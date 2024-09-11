@@ -106,7 +106,9 @@ REST_FRAMEWORK = {
 # Celery Configurations
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'amqp://guest:guest@localhost:5672/')
 CELERY_ACCEPT_CONTENT = list(map(str.strip, os.getenv("CELERY_ACCEPT_CONTENT", "").split(",")))
-CELERY_IMPORTS = []
+CELERY_IMPORTS = [
+    "notifications.services.email_service",
+]
 
 # Email settings
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
