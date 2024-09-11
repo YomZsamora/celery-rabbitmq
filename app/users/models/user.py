@@ -14,6 +14,9 @@ class User(models.Model):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+    
+    class Meta:
+        db_table="users"
 
     def __str__(self):
         return self.email
