@@ -10,10 +10,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField()
     email = serializers.EmailField(max_length=100, validators=[email_validator])
     password = serializers.CharField(write_only=True, validators=[password_validator])
+    last_login = serializers.ReadOnlyField(default=None)
 
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'password']
+        fields = ['email', 'first_name', 'last_name', 'password', 'last_login']
 
     def create(self, validated_data):
         
