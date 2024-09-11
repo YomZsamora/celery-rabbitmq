@@ -6,8 +6,19 @@ from users.serializers import UserRegistrationSerializer
 from utils.exceptions.custom_exceptions import SerializerValidationsError
 
 class UserRegistrationView(APIView):
+    
+    """
+    API view for handling POST requests for user registration.
+    """
 
     def post(self, request: Request) -> Response:
+        
+        """
+        Handles POST requests to register a new user.
+        Args: request: Request object containing user registration data.
+        Returns: Response: JSON response confirming successful registration or error details.
+        Raises: SerializerValidationsError: If serializer validation fails.
+        """
         
         serializer = UserRegistrationSerializer(data=request.data)
         self._validate_serializer(serializer)
