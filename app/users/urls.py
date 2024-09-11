@@ -1,3 +1,6 @@
-from django.urls import path, include
+from django.urls import path
+from users.views import UserRegistrationView
 
-urlpatterns = []
+urlpatterns = [
+    path('registration', UserRegistrationView.as_view(), name="user-registration"),
+]
