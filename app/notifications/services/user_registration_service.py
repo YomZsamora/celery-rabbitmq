@@ -13,5 +13,5 @@ class RegistrationEmailNotification:
             "message": "Your account has been successfully registered.",
             "recipients": [self.user.email]
         }
-        send_email(mail_data)
+        send_email.delay(mail_data)
         
