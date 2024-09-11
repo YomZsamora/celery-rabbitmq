@@ -1,18 +1,29 @@
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.request import Request
 from rest_framework.response import Response
 from users.serializers import UserRegistrationSerializer
+from utils.exceptions.custom_exceptions import SerializerValidationsError
 
 class UserRegistrationView(APIView):
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
+        
         serializer = UserRegistrationSerializer(data=request.data)
+        self._validate_serializer(serializer)
+        user = serializer.save()
+        return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
+    
+    def _validate_serializer(self, serializer):
         
-        if serializer.is_valid():
-            # Create user
-            user = serializer.save()
-            # Send notification
-            serializer.send_notification(user)
-            return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
+        """
+        Validates the serializer and raises an exception if it is not valid.
+        Args: serializer: The serializer instance.
+        Raises: SerializersValidationError: If the serializer is not valid.
+        """
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            raise SerializerValidationsError(
+                message="An error occured while registering new account.",
+                detail=[serializer.errors]
+            )

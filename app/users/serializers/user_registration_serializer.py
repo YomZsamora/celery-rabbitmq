@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import User
+from django.db import transaction
 from users.validators import email_validator, password_validator
 from notifications.services import RegistrationEmailNotification
 
@@ -16,9 +17,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         
-        user = User(email=validated_data['email'], first_name=validated_data['first_name'], last_name=validated_data['last_name'])
-        user.set_password(validated_data['password'])
-        user.save()
+        with transaction.atomic():
+            user = User(email=validated_data['email'], first_name=validated_data['first_name'], last_name=validated_data['last_name'])
+            user.set_password(validated_data['password'])
+            user.save()
+            transaction.on_commit(lambda: self.send_notification(user))
+            
         return user
 
     def send_notification(self, user: User) -> None:
