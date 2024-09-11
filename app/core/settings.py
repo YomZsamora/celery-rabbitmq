@@ -99,6 +99,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'UNAUTHENTICATED_USER': None,
     'EXCEPTION_HANDLER': 'utils.exceptions.exception_handlers.custom_exception_handler',
 }
 
@@ -111,7 +112,7 @@ CELERY_IMPORTS = []
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
 EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
+EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
