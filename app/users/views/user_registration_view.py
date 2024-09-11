@@ -12,7 +12,7 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         self._validate_serializer(serializer)
         user = serializer.save()
-        return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
+        return Response({"message": f"{user.email} has been registered successfully!", "data": serializer.data}, status=status.HTTP_201_CREATED)
     
     def _validate_serializer(self, serializer):
         
