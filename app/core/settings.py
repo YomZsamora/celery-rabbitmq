@@ -98,6 +98,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'utils.exceptions.exception_handlers.custom_exception_handler',
+}
+
 # Celery Configurations
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'amqp://guest:guest@localhost:5672/')
 CELERY_ACCEPT_CONTENT = list(map(str.strip, os.getenv("CELERY_ACCEPT_CONTENT", "").split(",")))
