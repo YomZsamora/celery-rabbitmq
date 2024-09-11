@@ -1,13 +1,14 @@
 from rest_framework import serializers
 from users.models import User
+from users.validators import email_validator, password_validator
 from notifications.services import RegistrationEmailNotification
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     
-    email = serializers.EmailField(max_length=100, validators=[])
-    first_name = serializers.CharField()
     last_name = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    first_name = serializers.CharField()
+    email = serializers.EmailField(max_length=100, validators=[email_validator])
+    password = serializers.CharField(write_only=True, validators=[password_validator])
 
     class Meta:
         model = User
