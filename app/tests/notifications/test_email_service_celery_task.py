@@ -2,7 +2,7 @@ from unittest import mock
 from tests.abstract_api_test import AbstractAPITest
 from notifications.services import RegistrationEmailNotification
 
-class UserRegistrationNotificationServiceTest(AbstractAPITest):
+class UserRegistrationServiceTest(AbstractAPITest):
     
     urlpatterns = []
     
