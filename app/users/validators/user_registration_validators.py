@@ -3,7 +3,7 @@ from utils.exceptions.custom_exceptions import SerializerValidationsError
 
 def email_validator(email: str):
     if User.objects.filter(email=email).exists():
-        raise SerializerValidationsError(f"{email} already has an account.")
+        raise SerializerValidationsError(f"{email} already has an account registered.")
     return email
 
 def password_validator(password: str):
