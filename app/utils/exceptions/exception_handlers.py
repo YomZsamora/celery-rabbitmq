@@ -3,7 +3,6 @@ from rest_framework.views import exception_handler
 from rest_framework.exceptions import ValidationError
 
 from utils.views.responses import ApiResponse, ERROR_STATUS
-from utils.exceptions.custom_exceptions import DoesNotExist
 from utils.exceptions.custom_exceptions import SerializerValidationsError
 
 def custom_exception_handler(exc, context):
@@ -17,11 +16,6 @@ def custom_exception_handler(exc, context):
         if exc.detail is not None:
             api_response.data = exc.detail
         return Response(vars(api_response), api_response.code)
-    
-    elif isinstance(exc, DoesNotExist):
-        api_response.code = exc.status_code
-        api_response.message = exc.message
-        return Response(vars(api_response), status=api_response.code)
     
     return exception_handler(exc, context)
     
