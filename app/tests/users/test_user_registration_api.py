@@ -26,7 +26,7 @@ class UserRegistrationAPITest(AbstractAPITest):
         
     def test_user_registration_successful(self):
         
-        with mock.patch('notifications.services.user_registration_service.RegistrationEmailNotification.send_registration_notification', new_callable=mock.MagicMock):
+        with mock.patch('notifications.services.registration_notification_service.RegistrationEmailNotification.send_registration_notification', new_callable=mock.MagicMock):
         
             response = self.client.post(reverse("user-registration"), json.dumps( self.payload), content_type="application/json")
             
