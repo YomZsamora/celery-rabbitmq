@@ -11,6 +11,8 @@ class User(models.Model):
     last_name = models.CharField(max_length=150, blank=True)
     password = models.CharField(max_length=255)
     last_login = models.DateTimeField(null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
