@@ -2,7 +2,6 @@ import json, pytest
 from unittest import mock
 from users.models import User
 from rest_framework import status
-from unittest.mock import MagicMock
 from users.views import UserRegistrationView
 from django.urls import path, include, reverse
 from tests.abstract_api_test import AbstractAPITest
