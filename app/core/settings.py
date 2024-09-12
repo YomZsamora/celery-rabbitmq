@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'notifications',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
