@@ -9,18 +9,6 @@ from tests.abstract_api_test import AbstractAPITest
 from users.serializers import UserRegistrationSerializer
 from utils.exceptions.custom_exceptions import SerializerValidationsError
 
-class MockUserRegistrationService:
-    
-    def __enter__(self):
-        self.email_service_instance = MagicMock()
-        return self.email_service_instance
-
-    def __exit__(self, *args):
-        pass
-
-    def __call__(self, *args, **kwargs):
-        return self
-
 class UserRegistrationAPITest(AbstractAPITest):
     
     urlpatterns = [
@@ -39,7 +27,7 @@ class UserRegistrationAPITest(AbstractAPITest):
         
     def test_user_registration_successful(self):
         
-        with mock.patch('notifications.services.user_registration_service.RegistrationEmailNotification.send_registration_notification', new_callable=MockUserRegistrationService):
+        with mock.patch('notifications.services.user_registration_service.RegistrationEmailNotification.send_registration_notification', new_callable=mock.MagicMock):
         
             response = self.client.post(reverse("user-registration"), json.dumps( self.payload), content_type="application/json")
             
