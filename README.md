@@ -73,6 +73,14 @@ This project uses Docker containerization for streamlined deployment and managem
    - The Django application can be accessed at [http://localhost:8023/](http://localhost:8023/).
    - The RabbitMQ management dashboard is available at [http://localhost:15672](http://localhost:15672), with the default credentials `guest:guest`.
 
+## Features
+
+The project emphasizes utilizing Celery for asynchronous task management in Django. It showcases this through a registration feature where email notifications are sent asynchronously post-registration, enhancing user experience by leveraging Celery's delay() method to queue the notification tasks without blocking the main application flow.
+
+Key Features:
+- **Asynchronous Task Processing:** Utilizes Celery to handle background tasks asynchronously.
+- **Efficient Email Notification:** Sends email notifications to users after registration without blocking the application flow.
+
 ### Development
 
 Want to contribute? Great! Here's how you can help:
