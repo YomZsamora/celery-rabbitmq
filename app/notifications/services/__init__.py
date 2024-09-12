@@ -1,2 +1,2 @@
 from .email_service import send_email
-from .user_registration_service import RegistrationEmailNotification
+from .registration_notification_service import RegistrationEmailNotification
