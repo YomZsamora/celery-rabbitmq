@@ -1,11 +1,13 @@
-import json
+import json, pytest
 from unittest import mock
 from users.models import User
 from rest_framework import status
 from unittest.mock import MagicMock
+from users.views import UserRegistrationView
 from django.urls import path, include, reverse
 from tests.abstract_api_test import AbstractAPITest
 from users.serializers import UserRegistrationSerializer
+from utils.exceptions.custom_exceptions import SerializerValidationsError
 
 class MockUserRegistrationService:
     
@@ -86,4 +88,13 @@ class UserRegistrationAPITest(AbstractAPITest):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.data['message'] == "Password must contain at least one uppercase, lowercase, and digit."
         
+    def test_validate_serializer_invalid(self):
         
+        view = UserRegistrationView()
+        request_invalid_data = {}
+        invalid_serializer = UserRegistrationSerializer(data=request_invalid_data)
+
+        assert not invalid_serializer.is_valid()
+        with pytest.raises(SerializerValidationsError):
+            view._validate_serializer(invalid_serializer)
+            
