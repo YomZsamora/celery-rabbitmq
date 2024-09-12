@@ -24,13 +24,6 @@ class User(models.Model):
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
 
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
-
-    def refresh_last_login(self):
-        self.last_login = datetime.now(tz=pytz.timezone(TIME_ZONE))
-        self.save()
-
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.password = make_password(self.password)
