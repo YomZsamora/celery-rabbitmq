@@ -42,6 +42,17 @@ services:
       - rabbitmq
     env_file:
       - ./app/.env
+  
+  celery-beat:
+    build: ./app
+    command: celery -A core beat --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./app:/code
+    depends_on:
+      - celery-app
+      - rabbitmq
+    env_file:
+      - ./app/.env
 
 volumes:
   celery-app-db:
