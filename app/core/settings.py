@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-
+from celery.schedules import crontab
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -110,6 +110,12 @@ CELERY_ACCEPT_CONTENT = list(map(str.strip, os.getenv("CELERY_ACCEPT_CONTENT", "
 CELERY_IMPORTS = [
     "notifications.services.email_service",
 ]
+CELERY_BEAT_SCHEDULE = {
+    'check_last_login': {
+        'task': 'notifications.services.check_last_login',
+        'schedule': crontab(hour=0, minute=0), 
+    },
+}
 
 # Email settings
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
