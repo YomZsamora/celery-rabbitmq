@@ -112,8 +112,8 @@ CELERY_IMPORTS = [
 ]
 CELERY_BEAT_SCHEDULE = {
     'check_last_login': {
-        'task': 'notifications.services.check_last_login',
-        'schedule': crontab(hour=0, minute=0), 
+        'task': 'notifications.services.login_reminder_service.check_last_login',
+        'schedule': crontab(minute='*/5'),
     },
 }
 
