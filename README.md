@@ -26,6 +26,7 @@ This Django application leverages Celery to manage asynchronous tasks efficientl
 - **pytest:** Testing framework for unit and integration tests.
 - **Django:** High-level Python web framework for rapid development.
 - **Celery:** Asynchronous task queue for handling background tasks.
+- **docker-celery-beat:** Periodic task scheduler for Celery tasks in Django.
 - **RabbitMQ:** Message broker used for communication between Celery and Django.
 - **Docker:** Containerization of services for development and deployment.
 - **Docker Compose:** Tool for defining and running multi-container Docker applications.
@@ -80,6 +81,7 @@ The project emphasizes utilizing Celery for asynchronous task management in Djan
 Key Features:
 - **Asynchronous Task Processing:** Utilizes Celery to handle background tasks asynchronously.
 - **Efficient Email Notification:** Sends email notifications to users after registration without blocking the application flow.
+- **Scheduled Reminders**: Uses django-celery-beat for periodic scheduling, reminding users with pending logins at specified intervals.
 
 ### Development
 
