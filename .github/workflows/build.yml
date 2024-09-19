@@ -95,3 +95,4 @@ jobs:
           docker stop celery-app celery-app-db
           docker rm celery-app celery-app-db
           docker network rm my-network
+          
