@@ -1,0 +1,97 @@
+name: Build, Test and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: Build celery-app Docker image
+        run: |
+          docker build -t ${{ env.DOCKER_USERNAME }}/celery-app:latest ./app
+
+      - name: Build celery-app-db Docker image
+        run: |
+          docker pull mysql:8.0.31
+          docker tag mysql:8.0.31 ${{ env.DOCKER_USERNAME }}/celery-app-db:latest
+
+      - name: Push celery-app Docker image
+        run: |
+          docker push ${{ env.DOCKER_USERNAME }}/celery-app:latest
+
+      - name: Push celery-app-db Docker image
+        run: |
+          docker push ${{ env.DOCKER_USERNAME }}/celery-app-db:latest
+
+  # test:
+
+  #   runs-on: ubuntu-latest
+  #   needs: build  
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Create Docker Network
+  #       run: docker network create my-network
+
+  #     - name: Start MySQL Container
+  #       run: |
+  #         docker run -d \
+  #           --name o-auth-db \
+  #           --network my-network \
+  #           -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+  #           -e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+  #           -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
+  #           -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+  #           -p 3306:3306 \
+  #           ${{ secrets.DOCKER_USERNAME }}/o-auth-db:latest
+
+  #     - name: Start o-auth Service
+  #       run: |
+  #         docker run -d \
+  #           --name o-auth \
+  #           --network my-network \
+  #           -e MYSQL_HOST=o-auth-db \
+  #           -e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
+  #           -e ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} \
+  #           -p 8000:8000 \
+  #           ${{ secrets.DOCKER_USERNAME }}/o-auth:latest python3 manage.py runserver 0.0.0.0:8000
+
+  #     - name: Run Migrations Inside Container
+  #       run: |
+  #         docker exec o-auth python manage.py migrate
+
+  #     - name: Run Tests Inside Container
+  #       run: |
+  #         docker exec o-auth pytest tests/
+
+  #     - name: Clean up Containers
+  #       run: |
+  #         docker stop o-auth o-auth-db
+  #         docker rm o-auth o-auth-db
+  #         docker network rm my-network
