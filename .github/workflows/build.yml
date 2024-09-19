@@ -47,51 +47,51 @@ jobs:
         run: |
           docker push ${{ env.DOCKER_USERNAME }}/celery-app-db:latest
 
-  # test:
+  test:
 
-  #   runs-on: ubuntu-latest
-  #   needs: build  
+    runs-on: ubuntu-latest
+    needs: build  
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     - name: Create Docker Network
-  #       run: docker network create my-network
+      - name: Create Docker Network
+        run: docker network create my-network
 
-  #     - name: Start MySQL Container
-  #       run: |
-  #         docker run -d \
-  #           --name o-auth-db \
-  #           --network my-network \
-  #           -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
-  #           -e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
-  #           -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
-  #           -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-  #           -p 3306:3306 \
-  #           ${{ secrets.DOCKER_USERNAME }}/o-auth-db:latest
+      - name: Start MySQL Container
+        run: |
+          docker run -d \
+            --name celery-app-db \
+            --network my-network \
+            -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+            -e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+            -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+            -p 3306:3306 \
+            ${{ secrets.DOCKER_USERNAME }}/celery-app-db:latest
 
-  #     - name: Start o-auth Service
-  #       run: |
-  #         docker run -d \
-  #           --name o-auth \
-  #           --network my-network \
-  #           -e MYSQL_HOST=o-auth-db \
-  #           -e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
-  #           -e ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} \
-  #           -p 8000:8000 \
-  #           ${{ secrets.DOCKER_USERNAME }}/o-auth:latest python3 manage.py runserver 0.0.0.0:8000
+      - name: Start celery-app Service
+        run: |
+          docker run -d \
+            --name celery-app \
+            --network my-network \
+            -e MYSQL_HOST=celery-app-db \
+            -e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
+            -e ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} \
+            -p 8000:8000 \
+            ${{ secrets.DOCKER_USERNAME }}/celery-app:latest python3 manage.py runserver 0.0.0.0:8000
 
-  #     - name: Run Migrations Inside Container
-  #       run: |
-  #         docker exec o-auth python manage.py migrate
+      - name: Run Migrations Inside Container
+        run: |
+          docker exec celery-app python manage.py migrate
 
-  #     - name: Run Tests Inside Container
-  #       run: |
-  #         docker exec o-auth pytest tests/
+      - name: Run Tests Inside Container
+        run: |
+          docker exec celery-app pytest tests/
 
-  #     - name: Clean up Containers
-  #       run: |
-  #         docker stop o-auth o-auth-db
-  #         docker rm o-auth o-auth-db
-  #         docker network rm my-network
+      - name: Clean up Containers
+        run: |
+          docker stop celery-app celery-app-db
+          docker rm celery-app celery-app-db
+          docker network rm my-network
