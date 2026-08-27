@@ -10,6 +10,9 @@ This Django application leverages Celery to manage asynchronous tasks efficientl
 
 - **Celery Integration:** Background task management with Celery.
 - **RabbitMQ:** Message broker for handling communication between Django and Celery.
+- **Scheduled Tasks:** Periodic task scheduling via django-celery-beat.
+- **REST API:** API endpoints built with Django REST Framework.
+- **CORS Support:** Configurable cross-origin resource sharing for API access.
 - **Docker:** Containerized environment for modular and scalable deployment.
 
 ## Prerequisites
@@ -22,12 +25,15 @@ This Django application leverages Celery to manage asynchronous tasks efficientl
 
 ## Technologies Used
 
-- **MySQL Connector/Python:** MySQL adapter for Python.
-- **pytest:** Testing framework for unit and integration tests.
 - **Django:** High-level Python web framework for rapid development.
+- **Django REST Framework:** Toolkit for building the project's API endpoints.
+- **MySQL Connector/Python:** MySQL adapter for Python.
 - **Celery:** Asynchronous task queue for handling background tasks.
-- **docker-celery-beat:** Periodic task scheduler for Celery tasks in Django.
+- **django-celery-beat:** Periodic task scheduler for Celery tasks in Django.
+- **django-cors-headers:** Middleware for handling Cross-Origin Resource Sharing (CORS).
 - **RabbitMQ:** Message broker used for communication between Celery and Django.
+- **pytest:** Testing framework for unit and integration tests.
+- **Faker:** Library for generating fake data used in tests.
 - **Docker:** Containerization of services for development and deployment.
 - **Docker Compose:** Tool for defining and running multi-container Docker applications.
 
@@ -73,6 +79,17 @@ This project uses Docker containerization for streamlined deployment and managem
 5. Access the Application
    - The Django application can be accessed at [http://localhost:8023/](http://localhost:8023/).
    - The RabbitMQ management dashboard is available at [http://localhost:15672](http://localhost:15672), with the default credentials `guest:guest`.
+
+## Setup Installations Requirements
+
+    * To set up and run the application locally, follow these steps:
+
+    1. git clone <https://github.com/YomZsamora/celery-rabbitmq.git>.
+    2. Create a `.env` file inside the `app` directory and add the environment variables.
+    3. Build and start the containers: `docker-compose up --build -d`.
+    4. Run database migrations: `docker-compose exec celery-app python manage.py migrate`.
+    5. Navigate to <http://localhost:8023/> in your browser or use Postman to interact with the API.
+    6. Optional: monitor RabbitMQ at <http://localhost:15672> with the default credentials `guest:guest`.
 
 ## Features
 
